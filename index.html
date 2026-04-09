@@ -2,9 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>زياد الكردي | Ziad Al-Kurdi PDF</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>زياد الكردي | ضاغط PDF الاحترافي</title>
     
+    <!-- المكتبات الأساسية -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,48 +18,12 @@
             background: #050505;
             color: #fff;
             min-height: 100vh;
+            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-        }
-
-        /* تصميم العلم العراقي برمجياً */
-        .iraq-flag {
-            width: 90px;
-            height: 60px;
-            display: flex;
-            flex-direction: column;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(255,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        /* تصميم علم كردستان برمجياً */
-        .kurdistan-flag {
-            width: 90px;
-            height: 60px;
-            display: flex;
-            flex-direction: column;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0,255,0,0.2);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .sun {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 24px;
-            height: 24px;
-            background: #f8e71c;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #f8e71c;
+            padding: 1rem;
         }
 
         .gold-title {
@@ -68,96 +33,108 @@
             font-weight: 900;
         }
 
-        .glass-panel {
-            background: rgba(15, 15, 15, 0.95);
-            border: 1px solid #222;
-            border-radius: 30px;
-            padding: 40px;
+        .main-container {
             width: 100%;
-            max-width: 550px;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+            max-width: 600px;
+            background: rgba(15, 15, 15, 0.98);
+            border: 1px solid #222;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        }
+
+        @media (min-width: 640px) {
+            .main-container {
+                padding: 3rem;
+                border-radius: 3rem;
+            }
         }
 
         input[type="range"] {
             -webkit-appearance: none;
             width: 100%;
-            height: 6px;
-            background: #222;
-            border-radius: 5px;
+            height: 10px;
+            background: #1a1a1a;
+            border-radius: 10px;
+            cursor: pointer;
             accent-color: #10b981;
         }
+
+        .drop-zone {
+            border: 2px dashed #333;
+            background: #000;
+            transition: all 0.3s ease;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .drop-zone:hover {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        /* منع التحديد لزيادة احترافية الموقع */
+        * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
 <body>
 
-    <!-- قسم الأعلام البرمجي -->
-    <div class="flex gap-6 mb-6">
-        <!-- علم كردستان -->
-        <div class="kurdistan-flag">
-            <div style="flex:1; background:#ED2024;"></div>
-            <div style="flex:1; background:#FFF;"></div>
-            <div style="flex:1; background:#278E3C;"></div>
-            <div class="sun"></div>
-        </div>
-        <!-- علم العراق -->
-        <div class="iraq-flag">
-            <div style="flex:1; background:#ED2024;"></div>
-            <div style="flex:1; background:#FFF; display:flex; align-items:center; justify-content:center; font-size:10px; color:#007A3D; font-weight:bold;">الله أكبر</div>
-            <div style="flex:1; background:#000;"></div>
-        </div>
+    <!-- ترويسة الموقع المستجيبة -->
+    <div class="text-center mb-6 sm:mb-10 w-full px-4">
+        <h1 class="text-4xl xs:text-5xl sm:text-7xl gold-title mb-2 sm:mb-4 italic">زياد الكردي</h1>
+        <p class="text-emerald-500 text-sm sm:text-xl tracking-[0.2em] sm:tracking-[0.4em] font-bold uppercase">ضغط ملفات PDF بشكل احترافي</p>
     </div>
 
-    <!-- ترويسة الموقع -->
-    <div class="text-center mb-8">
-        <h1 class="text-6xl gold-title mb-3">زياد الكردي</h1>
-        <p class="text-gray-400 text-lg tracking-[0.3em] font-bold">ضغط ملفات PDF بشكل احترافي</p>
-    </div>
-
-    <div class="glass-panel">
-        <!-- منطقة الرفع -->
-        <div id="dropZone" class="border-2 border-dashed border-zinc-800 rounded-3xl p-10 text-center hover:border-emerald-500 transition-all cursor-pointer mb-8 bg-black group">
+    <div class="main-container text-center">
+        <!-- منطقة رفع الملف -->
+        <div id="dropZone" class="drop-zone rounded-2xl sm:rounded-3xl p-6 sm:p-10 cursor-pointer mb-6 sm:mb-8 group">
             <input type="file" id="fileInput" class="hidden" accept="application/pdf">
-            <div id="uploadView">
-                <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">📄</div>
-                <p class="text-zinc-400">اضغط لرفع ملف PDF</p>
+            <div id="uploadView" class="space-y-4">
+                <div class="text-5xl sm:text-6xl group-hover:scale-110 transition-transform">📄</div>
+                <p class="text-zinc-400 font-bold text-base sm:text-lg italic">اضغط لرفع ملف PDF</p>
             </div>
-            <div id="fileView" class="hidden font-bold">
-                <p id="fileName" class="text-emerald-400 text-xl"></p>
-                <p id="fileSize" class="text-zinc-600 text-sm"></p>
+            <div id="fileView" class="hidden w-full overflow-hidden">
+                <p id="fileName" class="text-emerald-400 font-black text-lg sm:text-xl truncate px-4"></p>
+                <p id="fileSize" class="text-zinc-500 text-xs sm:text-sm mt-2"></p>
             </div>
         </div>
 
-        <!-- منزلق نسبة الضغط -->
-        <div class="mb-10">
+        <!-- إعدادات الضغط المستجيبة -->
+        <div class="mb-6 sm:mb-10 px-2">
             <div class="flex justify-between items-center mb-4">
-                <span class="text-zinc-300 font-bold">قوة الضغط المطلوبة:</span>
-                <span id="ratioLabel" class="text-3xl font-black text-emerald-500">35%</span>
+                <span class="text-zinc-300 font-bold text-sm sm:text-lg italic">نسبة الضغط:</span>
+                <span id="ratioLabel" class="text-3xl sm:text-4xl font-black text-emerald-500">35%</span>
             </div>
             <input type="range" id="ratioSlider" min="1" max="70" value="35">
-            <div class="flex justify-between text-[10px] text-zinc-600 mt-3 font-black uppercase">
-                <span>وضوح فائق (1%)</span>
-                <span>توازن احترافي</span>
-                <span>أصغر حجم (70%)</span>
+            <div class="flex justify-between text-[9px] sm:text-[11px] text-zinc-600 mt-4 font-black uppercase">
+                <span>وضوح فائق</span>
+                <span>توازن ذكي</span>
+                <span>أصغر حجم</span>
             </div>
         </div>
 
-        <button id="processBtn" disabled class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-800 text-white font-black py-5 rounded-2xl transition-all shadow-2xl shadow-emerald-900/40 text-xl">
-            بدء الضغط الذكي ⚡
+        <!-- زر التشغيل -->
+        <button id="processBtn" disabled class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-800 text-white font-black py-4 sm:py-5 rounded-xl sm:rounded-2xl transition-all shadow-xl shadow-emerald-900/40 text-lg sm:text-2xl uppercase italic tracking-tighter">
+            بدء الضغط الآن ⚡
         </button>
 
         <!-- حالة التقدم -->
-        <div id="progressCont" class="hidden mt-10">
-            <div class="flex justify-between text-xs mb-2">
-                <span id="statusText" class="text-emerald-400 italic">جاري معالجة النصوص بدقة عالية...</span>
-                <span id="percentText" class="font-black text-xl">0%</span>
+        <div id="progressCont" class="hidden mt-8 sm:mt-12">
+            <div class="flex justify-between text-[10px] sm:text-sm mb-3">
+                <span id="statusText" class="text-emerald-400 font-bold italic animate-pulse">جاري معالجة النصوص...</span>
+                <span id="percentText" class="font-black text-xl sm:text-2xl">0%</span>
             </div>
-            <div class="w-full bg-zinc-900 h-2 rounded-full overflow-hidden">
-                <div id="progressBar" class="h-full bg-emerald-500 w-0 transition-all duration-300"></div>
+            <div class="w-full bg-zinc-900 h-2 sm:h-3 rounded-full overflow-hidden border border-zinc-800">
+                <div id="progressBar" class="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 w-0 transition-all duration-300"></div>
             </div>
         </div>
     </div>
 
-    <footer class="mt-12 text-zinc-700 text-sm font-bold">
+    <!-- التذييل المستجيب -->
+    <footer class="mt-8 sm:mt-14 text-zinc-700 text-[10px] sm:text-sm font-bold tracking-widest uppercase text-center px-4">
         DEVELOPED BY: <span class="text-zinc-400">ZIAD AL-KURDI</span> &copy; 2024
     </footer>
 
@@ -188,7 +165,7 @@
 
         processBtn.onclick = async () => {
             const ratio = parseInt(ratioSlider.value);
-            // تحسين: الجودة تتبع المنزلق بدقة
+            // جودة حقيقية متوازنة
             const quality = 0.98 - (ratio / 78);
             
             processBtn.disabled = true;
@@ -202,7 +179,7 @@
 
                 for (let i = 1; i <= numPages; i++) {
                     const page = await pdfData.getPage(i);
-                    // السر: Scale 3.0 يمنحك نصاً حاداً جداً وواضحاً كالأصل
+                    // مقياس 3.0 لضمان وضوح فائق للنصوص على جميع الشاشات
                     const viewport = page.getViewport({scale: 3.0});
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d', { alpha: false });
@@ -210,7 +187,6 @@
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
                     
-                    // تحسين الرسم للنصوص
                     ctx.imageSmoothingEnabled = true;
                     ctx.imageSmoothingQuality = 'high';
 
@@ -232,13 +208,13 @@
                 const blob = new Blob([pdfBytes], { type: "application/pdf" });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = "مضغوط_زياد_الكردي_" + selectedFile.name;
+                link.download = "Ziad_Compressed_" + selectedFile.name;
                 link.click();
                 
-                document.getElementById('statusText').innerText = "✅ تمت العملية بنجاح!";
+                document.getElementById('statusText').innerText = "✅ اكتمل الضغط بنجاح!";
             } catch (err) {
                 console.error(err);
-                alert("تعذر المعالجة: الملف ضخم جداً على ذاكرة المتصفح.");
+                alert("تعذر المعالجة: الملف كبير جداً على ذاكرة الهاتف.");
             }
             processBtn.disabled = false;
         };
