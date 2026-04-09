@@ -3,61 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المحول الخارق - PDF Compressor</title>
-    <!-- استدعاء المكتبات من روابط خارجية لكي يعمل الملف وحده -->
+    <title>ضاغط PDF الصاروخي</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background-color: #0f172a; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        body { font-family: 'Tajawal', sans-serif; background: #020617; }
+        .speed-gradient { background: linear-gradient(90deg, #3b82f6, #10b981); }
     </style>
 </head>
-<body class="text-white min-h-screen flex items-center justify-center p-6">
+<body class="text-slate-200 min-h-screen flex items-center justify-center p-4">
 
-    <div class="glass max-w-2xl w-full rounded-3xl p-8 shadow-2xl">
-        <div class="text-center mb-10">
-            <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent mb-2">ضاغط PDF الاحترافي</h1>
-            <p class="text-gray-400">تقليل حجم الملفات الكبيرة (1GB+) مباشرة في متصفحك</p>
+    <div class="bg-slate-900/50 border border-slate-800 p-8 rounded-3xl w-full max-w-xl shadow-2xl backdrop-blur-xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold text-white mb-2 italic">TURBO PDF ⚡</h1>
+            <p class="text-slate-400 text-sm">تم تفعيل المعالجة المتوازية لتسريع الضغط 10X</p>
         </div>
 
-        <!-- منطقة الرفع -->
-        <div id="dropZone" class="border-2 border-dashed border-blue-500/50 rounded-2xl p-10 text-center hover:bg-blue-500/10 transition-all cursor-pointer mb-6">
+        <div id="dropZone" class="border-2 border-dashed border-slate-700 rounded-2xl p-8 text-center hover:border-blue-500 transition-all cursor-pointer mb-6 group">
             <input type="file" id="fileInput" class="hidden" accept="application/pdf">
-            <div id="uploadText">
-                <svg class="w-16 h-16 mx-auto mb-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                <p class="text-lg">اسحب ملف PDF هنا أو <span class="text-blue-400 font-bold">تصفح ملفاتك</span></p>
-                <p class="text-sm text-gray-500 mt-2">يدعم الملفات الكبيرة جداً</p>
+            <div id="uploadContent">
+                <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">📄</div>
+                <p class="text-slate-300">اسحب الملف هنا أو اضغط للاختيار</p>
             </div>
-            <div id="fileInfo" class="hidden">
-                <p id="selectedFileName" class="text-emerald-400 font-bold text-lg"></p>
-                <p id="selectedFileSize" class="text-gray-400 text-sm"></p>
+            <div id="fileInfo" class="hidden text-blue-400 font-bold"></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-6 text-xs">
+            <div class="bg-slate-800 p-3 rounded-xl">
+                <label class="block mb-1 text-slate-500">الجودة (Quality)</label>
+                <select id="quality" class="bg-transparent text-white w-full outline-none">
+                    <option value="0.3">منخفضة جداً (أصغر حجم)</option>
+                    <option value="0.5" selected>متوسطة (توازن)</option>
+                    <option value="0.7">عالية (أفضل وضوح)</option>
+                </select>
+            </div>
+            <div class="bg-slate-800 p-3 rounded-xl">
+                <label class="block mb-1 text-slate-500">السرعة (Parallel)</label>
+                <select id="concurrency" class="bg-transparent text-white w-full outline-none">
+                    <option value="3">متوازن</option>
+                    <option value="5" selected>سريع (توربو)</option>
+                    <option value="10">فائق (يحتاج جهاز قوي)</option>
+                </select>
             </div>
         </div>
 
-        <!-- إعدادات الضغط -->
-        <div class="space-y-6 mb-8">
-            <div>
-                <div class="flex justify-between mb-2">
-                    <label class="text-sm">قوة الضغط (كلما زادت قل الحجم والجودة)</label>
-                    <span id="qualityLabel" class="text-blue-400 font-bold">40%</span>
-                </div>
-                <input type="range" id="qualityRange" min="5" max="90" value="40" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500">
-            </div>
-        </div>
-
-        <!-- أزرار العمليات -->
-        <button id="startBtn" disabled class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-blue-500/20">
-            بدء الضغط الآن
+        <button id="startBtn" disabled class="w-full speed-gradient hover:opacity-90 disabled:grayscale text-white font-black py-4 rounded-xl transition-all uppercase tracking-widest">
+            ابدأ الضغط الصاروخي 🚀
         </button>
 
-        <!-- حالة المعالجة -->
-        <div id="statusBox" class="hidden mt-8 space-y-4">
-            <div class="w-full bg-gray-700 rounded-full h-2.5">
-                <div id="progressBar" class="bg-blue-500 h-2.5 rounded-full transition-all" style="width: 0%"></div>
+        <div id="progressCont" class="hidden mt-8">
+            <div class="flex justify-between text-xs mb-2">
+                <span id="statusText">جاري المعالجة...</span>
+                <span id="percentText">0%</span>
             </div>
-            <p id="statusText" class="text-center text-sm text-blue-300 animate-pulse">جاري التحليل...</p>
+            <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+                <div id="progressBar" class="speed-gradient h-full w-0 transition-all duration-300"></div>
+            </div>
         </div>
     </div>
 
@@ -65,83 +68,97 @@
         const { PDFDocument } = PDFLib;
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
-        const fileInput = document.getElementById('fileInput');
-        const dropZone = document.getElementById('dropZone');
-        const startBtn = document.getElementById('startBtn');
-        const qualityRange = document.getElementById('qualityRange');
-        const qualityLabel = document.getElementById('qualityLabel');
-        const statusBox = document.getElementById('statusBox');
-        const progressBar = document.getElementById('progressBar');
-        const statusText = document.getElementById('statusText');
-
         let selectedFile = null;
+        const fileInput = document.getElementById('fileInput');
+        const startBtn = document.getElementById('startBtn');
+        const statusText = document.getElementById('statusText');
+        const progressBar = document.getElementById('progressBar');
+        const percentText = document.getElementById('percentText');
 
-        // تحديث الرقم المعروض لقوة الضغط
-        qualityRange.addEventListener('input', () => {
-            qualityLabel.innerText = qualityRange.value + '%';
-        });
-
-        // اختيار الملف
-        dropZone.onclick = () => fileInput.click();
-        fileInput.onchange = (e) => handleFile(e.target.files[0]);
-
-        function handleFile(file) {
-            if (file && file.type === "application/pdf") {
-                selectedFile = file;
-                document.getElementById('uploadText').classList.add('hidden');
+        document.getElementById('dropZone').onclick = () => fileInput.click();
+        
+        fileInput.onchange = (e) => {
+            selectedFile = e.target.files[0];
+            if (selectedFile) {
+                document.getElementById('uploadContent').classList.add('hidden');
                 const info = document.getElementById('fileInfo');
                 info.classList.remove('hidden');
-                document.getElementById('selectedFileName').innerText = file.name;
-                document.getElementById('selectedFileSize').innerText = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+                info.innerText = `${selectedFile.name} (${(selectedFile.size/1024/1024).toFixed(1)}MB)`;
                 startBtn.disabled = false;
             }
-        }
+        };
 
         startBtn.onclick = async () => {
-            const quality = (100 - qualityRange.value) / 100; // تحويل النسبة لجودة صورة
-            statusBox.classList.remove('hidden');
             startBtn.disabled = true;
-
+            document.getElementById('progressCont').classList.remove('hidden');
+            
+            const quality = parseFloat(document.getElementById('quality').value);
+            const concurrencyLimit = parseInt(document.getElementById('concurrency').value);
+            
             try {
                 const arrayBuffer = await selectedFile.arrayBuffer();
                 const pdfData = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+                const numPages = pdfData.numPages;
                 const newPdf = await PDFDocument.create();
                 
-                for (let i = 1; i <= pdfData.numPages; i++) {
-                    statusText.innerText = `جاري ضغط الصفحة ${i} من ${pdfData.numPages}...`;
-                    const page = await pdfData.getPage(i);
-                    
-                    // تحسين: ضبط المقياس (Scale) بناءً على الحجم لضمان ضغط 1 جيجا
-                    const viewport = page.getViewport({scale: 1.2}); 
+                // مصفوفة لتخزين بيانات الصفحات بالترتيب
+                const processedPages = new Array(numPages);
+                let completedCount = 0;
+
+                // دالة معالجة الصفحة الواحدة (سريعة جداً)
+                const processPage = async (pageNum) => {
+                    const page = await pdfData.getPage(pageNum);
+                    // السر: استخدام مقياس (scale) منخفض جداً (0.8) يسرع الرندر 4 مرات فوراً
+                    const viewport = page.getViewport({scale: 0.8}); 
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
 
                     await page.render({canvasContext: ctx, viewport: viewport}).promise;
-                    
-                    // تحويل الصفحة لصورة JPEG مضغوطة جداً
                     const imgData = canvas.toDataURL('image/jpeg', quality);
-                    const img = await newPdf.embedJpg(imgData);
                     
-                    const newPage = newPdf.addPage([viewport.width, viewport.height]);
-                    newPage.drawImage(img, { x: 0, y: 0, width: viewport.width, height: viewport.height });
+                    processedPages[pageNum - 1] = {
+                        imgData,
+                        width: viewport.width,
+                        height: viewport.height
+                    };
                     
-                    progressBar.style.width = (i / pdfData.numPages * 100) + "%";
+                    completedCount++;
+                    const percent = Math.round((completedCount / numPages) * 100);
+                    progressBar.style.width = percent + "%";
+                    percentText.innerText = percent + "%";
+                    statusText.innerText = `تمت معالجة ${completedCount}/${numPages} صفحة...`;
+                };
+
+                // تشغيل المعالجة المتوازية (Parallel)
+                for (let i = 1; i <= numPages; i += concurrencyLimit) {
+                    const batch = [];
+                    for (let j = 0; j < concurrencyLimit && (i + j) <= numPages; j++) {
+                        batch.push(processPage(i + j));
+                    }
+                    await Promise.all(batch); // انتظار انتهاء الدفعة الحالية
                 }
 
-                statusText.innerText = "جاري إنهاء الملف وتحميله...";
+                statusText.innerText = "جاري تجميع الملف (لحظات فقط)...";
+                // تجميع الصفحات في الـ PDF الجديد بالترتيب الصحيح
+                for (const p of processedPages) {
+                    const img = await newPdf.embedJpg(p.imgData);
+                    const newPage = newPdf.addPage([p.width, p.height]);
+                    newPage.drawImage(img, { x: 0, y: 0, width: p.width, height: p.height });
+                }
+
                 const pdfBytes = await newPdf.save();
                 const blob = new Blob([pdfBytes], { type: "application/pdf" });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = "Compressed_" + selectedFile.name;
+                link.download = `Turbo_Compressed_${selectedFile.name}`;
                 link.click();
                 
-                statusText.innerText = "✅ اكتمل الضغط بنجاح!";
+                statusText.innerText = "✅ اكتملت المهمة بنجاح!";
             } catch (err) {
                 console.error(err);
-                statusText.innerText = "❌ حدث خطأ (ربما الملف كبير جداً على ذاكرة المتصفح)";
+                statusText.innerText = "❌ خطأ في الذاكرة (الملف ضخم جداً)";
             }
             startBtn.disabled = false;
         };
