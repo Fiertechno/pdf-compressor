@@ -2,51 +2,59 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>الضاغط النفاث PDF Jet-Stream</title>
+    <title>المعالج الذكي PDF Pro</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Tajawal:wght@400;700&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background: #000; overflow: hidden; }
-        .glitch { font-family: 'Orbitron', sans-serif; text-shadow: 0 0 10px #00f2ff; }
-        .progress-glow { box-shadow: 0 0 15px #3b82f6; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Tajawal:wght@500;800&display=swap');
+        body { font-family: 'Tajawal', sans-serif; background: #0f172a; color: white; }
+        .gradient-border { border: 2px solid; border-image: linear-gradient(45deg, #3b82f6, #10b981) 1; }
     </style>
 </head>
-<body class="text-white flex items-center justify-center min-h-screen">
+<body class="min-h-screen flex items-center justify-center p-6">
 
-    <div class="relative w-full max-w-lg p-1 bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl">
-        <div class="bg-black rounded-[22px] p-8">
-            <h1 class="glitch text-3xl text-center mb-2 text-cyan-400 font-bold italic tracking-tighter">HYPER COMPRESSOR</h1>
-            <p class="text-center text-xs text-gray-400 mb-8 uppercase tracking-widest">تحذير: سرعة قصوى - استهلاك كامل للمعالج</p>
+    <div class="bg-slate-900 border border-slate-800 shadow-2xl rounded-3xl p-8 w-full max-w-2xl">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400 mb-2">ضاغط PDF الذكي (جودة احترافية)</h1>
+            <p class="text-slate-400 text-sm">توازن بين وضوح النص وصغر الحجم الفائق</p>
+        </header>
 
-            <div id="dropZone" class="border-2 border-dashed border-gray-800 rounded-2xl p-12 text-center hover:bg-blue-900/20 transition-all cursor-pointer group relative overflow-hidden">
-                <input type="file" id="fileInput" class="hidden" accept="application/pdf">
-                <div class="relative z-10">
-                    <span class="text-5xl block mb-4">⚡</span>
-                    <p id="fileLabel" class="text-gray-300">ألقِ بملف الـ 1 جيجا هنا</p>
+        <div id="dropZone" class="bg-slate-800/50 border-2 border-dashed border-slate-700 rounded-2xl p-12 text-center hover:border-emerald-500 transition-all cursor-pointer mb-8 group">
+            <input type="file" id="fileInput" class="hidden" accept="application/pdf">
+            <div id="prompt">
+                <div class="text-6xl mb-4 opacity-50 group-hover:opacity-100 transition-opacity">📑</div>
+                <p class="text-slate-300">اسحب الملف هنا (حتى 1 جيجا)</p>
+            </div>
+            <div id="fileStatus" class="hidden text-emerald-400 font-bold"></div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                <div class="flex justify-between mb-4">
+                    <label class="text-sm font-bold">موازنة الجودة والحجم:</label>
+                    <span id="valDisplay" class="text-emerald-400 font-bold">متوازن (جيد)</span>
+                </div>
+                <input type="range" id="qualitySlider" min="1" max="3" value="2" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                <div class="flex justify-between text-[10px] text-slate-500 mt-2">
+                    <span>أصغر حجم (نص مقروء)</span>
+                    <span>متوازن</span>
+                    <span>جودة عالية (حجم أكبر)</span>
                 </div>
             </div>
 
-            <div class="mt-6 space-y-4">
-                <div class="flex justify-between items-center bg-gray-900 p-3 rounded-xl border border-gray-800">
-                    <span class="text-xs text-gray-400">وضع المحرك:</span>
-                    <span class="text-xs font-bold text-cyan-400 uppercase">Multi-Threaded (Active)</span>
-                </div>
-                
-                <button id="startBtn" disabled class="w-full py-4 bg-cyan-500 hover:bg-cyan-400 text-black font-black rounded-xl transition-all disabled:opacity-20 disabled:cursor-not-allowed uppercase italic tracking-tighter">
-                    تفعيل الضغط النفاث
-                </button>
-            </div>
+            <button id="startBtn" disabled class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-700 text-white font-black py-4 rounded-xl transition-all shadow-lg shadow-emerald-900/20 uppercase tracking-widest">
+                تحسين وضغط الآن 🚀
+            </button>
+        </div>
 
-            <div id="statusArea" class="hidden mt-8">
-                <div class="flex justify-between text-[10px] text-cyan-500 mb-2 uppercase font-bold">
-                    <span id="speedMsg">جاري تشغيل النواة...</span>
-                    <span id="percent">0%</span>
-                </div>
-                <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
-                    <div id="bar" class="w-0 h-full bg-cyan-400 progress-glow transition-all duration-75"></div>
-                </div>
+        <div id="progressArea" class="hidden mt-10">
+            <div class="flex justify-between text-xs mb-2 text-slate-400">
+                <span id="statusMsg">جاري التحليل...</span>
+                <span id="percentNum">0%</span>
+            </div>
+            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-emerald-500 h-full w-0 transition-all duration-300"></div>
             </div>
         </div>
     </div>
@@ -57,86 +65,100 @@
 
         const fileInput = document.getElementById('fileInput');
         const startBtn = document.getElementById('startBtn');
-        const dropZone = document.getElementById('dropZone');
+        const slider = document.getElementById('qualitySlider');
+        const valDisplay = document.getElementById('valDisplay');
         
-        dropZone.onclick = () => fileInput.click();
+        let selectedFile = null;
+
+        const modes = {
+            1: { scale: 1.0, quality: 0.3, label: "أصغر حجم (نص مقروء)" },
+            2: { scale: 1.5, quality: 0.5, label: "متوازن (جودة جيدة)" },
+            3: { scale: 2.0, quality: 0.7, label: "جودة احترافية (وضوح عالٍ)" }
+        };
+
+        slider.oninput = () => valDisplay.innerText = modes[slider.value].label;
+
+        document.getElementById('dropZone').onclick = () => fileInput.click();
         fileInput.onchange = (e) => {
             if(e.target.files[0]) {
-                document.getElementById('fileLabel').innerText = e.target.files[0].name;
+                selectedFile = e.target.files[0];
+                document.getElementById('prompt').classList.add('hidden');
+                document.getElementById('fileStatus').classList.remove('hidden');
+                document.getElementById('fileStatus').innerText = `تم اختيار: ${selectedFile.name}`;
                 startBtn.disabled = false;
             }
         };
 
         startBtn.onclick = async () => {
-            const file = fileInput.files[0];
+            const mode = modes[slider.value];
             startBtn.disabled = true;
-            document.getElementById('statusArea').classList.remove('hidden');
-            
-            const startTimestamp = performance.now();
-            
+            document.getElementById('progressArea').classList.remove('hidden');
+
             try {
-                const arrayBuffer = await file.arrayBuffer();
-                const pdfData = await pdfjsLib.getDocument({data: arrayBuffer, verbosity: 0}).promise;
+                const arrayBuffer = await selectedFile.arrayBuffer();
+                const pdfData = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
                 const numPages = pdfData.numPages;
-                const resultPdf = await PDFDocument.create();
+                const outPdf = await PDFDocument.create();
 
-                // السرعة القصوى: معالجة دفعات ضخمة (Parallel Batching)
-                const CONCURRENCY = 8; // معالجة 8 صفحات في اللحظة الواحدة
-                
-                for (let i = 1; i <= numPages; i += CONCURRENCY) {
-                    const promises = [];
-                    for (let j = 0; j < CONCURRENCY && (i + j) <= numPages; j++) {
-                        promises.push(renderAndCompress(pdfData, i + j));
-                    }
-                    
-                    const pagesData = await Promise.all(promises);
-                    
-                    for (const data of pagesData) {
-                        const img = await resultPdf.embedJpg(data.img);
-                        const p = resultPdf.addPage([data.w, data.h]);
-                        p.drawImage(img, { x: 0, y: 0, width: data.w, height: data.h });
+                // المعالجة بدفعات (أسرع وأكثر استقراراً)
+                const batchSize = 4; 
+                for (let i = 1; i <= numPages; i += batchSize) {
+                    const tasks = [];
+                    for (let j = 0; j < batchSize && (i + j) <= numPages; j++) {
+                        tasks.push(renderPage(pdfData, i + j, mode));
                     }
 
-                    const pDone = Math.min(100, Math.round(((i + CONCURRENCY) / numPages) * 100));
-                    document.getElementById('bar').style.width = pDone + "%";
-                    document.getElementById('percent').innerText = pDone + "%";
-                    document.getElementById('speedMsg').innerText = `تم ضغط ${Math.min(i+CONCURRENCY-1, numPages)} من ${numPages}`;
+                    const results = await Promise.all(tasks);
+
+                    for (const res of results) {
+                        const img = await outPdf.embedJpg(res.imgData);
+                        const page = outPdf.addPage([res.width, res.height]);
+                        page.drawImage(img, { x: 0, y: 0, width: res.width, height: res.height });
+                    }
+
+                    const progress = Math.round((Math.min(i + batchSize - 1, numPages) / numPages) * 100);
+                    document.getElementById('progressBar').style.width = progress + "%";
+                    document.getElementById('percentNum').innerText = progress + "%";
+                    document.getElementById('statusMsg').innerText = `معالجة صفحة ${Math.min(i + batchSize - 1, numPages)} من ${numPages}...`;
                 }
 
-                const finalPdf = await resultPdf.save();
-                const blob = new Blob([finalPdf], { type: "application/pdf" });
+                document.getElementById('statusMsg').innerText = "جاري الحفظ النهائي...";
+                const finalBytes = await outPdf.save();
+                const blob = new Blob([finalBytes], { type: "application/pdf" });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
-                a.download = `Ultra_Small_${file.name}`;
+                a.download = "Optimized_" + selectedFile.name;
                 a.click();
-                
-                const endTimestamp = performance.now();
-                document.getElementById('speedMsg').innerText = `اكتمل في ${((endTimestamp - startTimestamp)/1000).toFixed(1)} ثانية!`;
+                document.getElementById('statusMsg').innerText = "✅ اكتمل التحميل!";
 
             } catch (err) {
                 console.error(err);
-                alert("ذاكرة المتصفح ممتلئة! الملف ضخم جداً.");
+                document.getElementById('statusMsg').innerText = "❌ حدث خطأ في الذاكرة.";
             }
             startBtn.disabled = false;
         };
 
-        async function renderAndCompress(pdf, pageNum) {
+        async function renderPage(pdf, pageNum, mode) {
             const page = await pdf.getPage(pageNum);
-            // لتقليل الحجم من 1 جيجا لـ 10 ميجا: يجب تقليل الـ Scale لـ 0.5 (سرعة جنونية وضغط رهيب)
-            const viewport = page.getViewport({scale: 0.5}); 
+            // السر هنا: scale=1.5 يحافظ على وضوح النص بشكل كبير جداً مقارنة بـ 0.5
+            const viewport = page.getViewport({scale: mode.scale});
             const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d', { alpha: false }); // تعطيل الألفا لتسريع الرندر
+            const ctx = canvas.getContext('2d', { alpha: false });
+            
             canvas.height = viewport.height;
             canvas.width = viewport.width;
 
+            // تحسين الرندر ليكون النص حاداً (Sharp)
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+
             await page.render({canvasContext: ctx, viewport: viewport}).promise;
             
-            // جودة 0.1 هي المفتاح للوصول لحجم 10 ميجا
             return {
-                img: canvas.toDataURL('image/jpeg', 0.15), 
-                w: viewport.width,
-                h: viewport.height
+                imgData: canvas.toDataURL('image/jpeg', mode.quality),
+                width: viewport.width,
+                height: viewport.height
             };
         }
     </script>
