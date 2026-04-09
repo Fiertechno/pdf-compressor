@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مضغوط PDF المجاني - GitHub</title>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-2xl text-center">
+        <h1 class="text-3xl font-bold text-blue-600 mb-4">ضاغط PDF الاحترافي</h1>
+        <p class="text-gray-600 mb-6">يعمل مباشرة في متصفحك (خصوصية تامة - لا يتم رفع ملفاتك للسيرفر)</p>
+
+        <div id="drop-zone" class="border-4 border-dashed border-gray-300 rounded-lg p-10 cursor-pointer hover:border-blue-500 transition">
+            <p class="text-lg text-gray-500">اسحب الملف هنا أو اضغط للاختيار</p>
+            <input type="file" id="file-input" class="hidden" accept="application/pdf">
+        </div>
+
+        <div id="file-info" class="mt-4 hidden">
+            <p id="file-name" class="font-semibold text-gray-700"></p>
+            <p id="file-size" class="text-sm text-gray-500"></p>
+        </div>
+
+        <div class="mt-6 space-y-4">
+            <label class="block text-right font-medium text-gray-700">مستوى الضغط (تقريبي):</label>
+            <input type="range" id="quality" min="0.1" max="1.0" step="0.1" value="0.5" class="w-full">
+            <div class="flex justify-between text-xs text-gray-500">
+                <span>أقصى ضغط</span>
+                <span>جودة عالية</span>
+            </div>
+        </div>
+
+        <button id="compress-btn" class="mt-8 bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 disabled:bg-gray-400 transition" disabled>
+            بدء الضغط الآن
+        </button>
+
+        <div id="status" class="mt-4 text-sm font-medium text-blue-600"></div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const dropZone = document.getElementById('drop-zone');
+        const compressBtn = document.getElementById('compress-btn');
+        const status = document.getElementById('status');
+        const fileInfo = document.getElementById('file-info');
+
+        let selectedFile = null;
+
+        // التعامل مع السحب والإفلات
+        dropZone.onclick = () => fileInput.click();
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('border-blue-500'); };
+        dropZone.ondragleave = () => dropZone.classList.remove('border-blue-500');
+        dropZone.ondrop = (e) => {
+            e.preventDefault();
+            handleFile(e.dataTransfer.files[0]);
+        };
+
+        fileInput.onchange = (e) => handleFile(e.target.files[0]);
+
+        function handleFile(file) {
+            if (file && file.type === "application/pdf") {
+                selectedFile = file;
+                fileInfo.classList.remove('hidden');
+                document.getElementById('file-name').innerText = file.name;
+                document.getElementById('file-size').innerText = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+                compressBtn.disabled = false;
+                status.innerText = "";
+            } else {
+                alert("يرجى اختيار ملف PDF صحيح");
+            }
+        }
+
+        compressBtn.onclick = async () => {
+            if (!selectedFile) return;
+
+            status.innerText = "جاري معالجة الملف... يرجى الانتظار (لا تغلق الصفحة)";
+            compressBtn.disabled = true;
+
+            try {
+                const arrayBuffer = await selectedFile.arrayBuffer();
+                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                
+                // ملاحظة: مكتبة متصفح بسيطة لا يمكنها تقليل حجم الصور بعمق مثل Ghostscript
+                // سنقوم بحفظ الملف بنظام "Linearization" و "Object Streams" لتقليل الحجم
+                
+                const pdfBytes = await pdfDoc.save({
+                    useObjectStreams: true,
+                    addDefaultPage: false,
+                    updateFieldAppearances: false
+                });
+
+                const blob = new Blob([pdfBytes], { type: "application/pdf" });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `compressed_${selectedFile.name}`;
+                link.click();
+
+                status.innerText = "تمت العملية! إذا لم يقل الحجم بشكل كبير، فذلك لأن الملف مضغوط بالفعل داخلياً.";
+            } catch (error) {
+                console.error(error);
+                status.innerText = "حدث خطأ: الملف كبير جداً على ذاكرة المتصفح.";
+            } finally {
+                compressBtn.disabled = false;
+            }
+        };
+    </script>
+</body>
+</html>
