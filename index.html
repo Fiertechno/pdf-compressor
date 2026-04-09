@@ -3,108 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مضغوط PDF المجاني - GitHub</title>
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>ضاغط PDF العملاق</title>
+    <!-- استيراد المكتبات اللازمة للمعالجة الجرافيكية -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root { --primary: #2563eb; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 500px; text-align: center; }
+        .drop-zone { border: 3px dashed #cbd5e1; padding: 40px 20px; border-radius: 15px; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
+        .drop-zone:hover { border-color: var(--primary); background: #f1f5f9; }
+        .settings { margin-bottom: 20px; text-align: right; background: #f8fafc; padding: 15px; border-radius: 10px; }
+        input[type="range"] { width: 100%; cursor: pointer; }
+        button { background: var(--primary); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; font-size: 16px; }
+        button:disabled { background: #94a3b8; cursor: not-allowed; }
+        #log { margin-top: 20px; font-size: 13px; color: #64748b; max-height: 100px; overflow-y: auto; text-align: right; }
+        .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; margin-top: 10px; display: none; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.2s; }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+<body>
 
-    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-2xl text-center">
-        <h1 class="text-3xl font-bold text-blue-600 mb-4">ضاغط PDF الاحترافي</h1>
-        <p class="text-gray-600 mb-6">يعمل مباشرة في متصفحك (خصوصية تامة - لا يتم رفع ملفاتك للسيرفر)</p>
+<div class="container">
+    <h2 style="color: #1e293b;">ضاغط PDF فائق القوة</h2>
+    <p style="color: #64748b; font-size: 14px;">يقلل الحجم عبر إعادة معالجة الصور (مثالي للملفات الضخمة)</p>
 
-        <div id="drop-zone" class="border-4 border-dashed border-gray-300 rounded-lg p-10 cursor-pointer hover:border-blue-500 transition">
-            <p class="text-lg text-gray-500">اسحب الملف هنا أو اضغط للاختيار</p>
-            <input type="file" id="file-input" class="hidden" accept="application/pdf">
-        </div>
-
-        <div id="file-info" class="mt-4 hidden">
-            <p id="file-name" class="font-semibold text-gray-700"></p>
-            <p id="file-size" class="text-sm text-gray-500"></p>
-        </div>
-
-        <div class="mt-6 space-y-4">
-            <label class="block text-right font-medium text-gray-700">مستوى الضغط (تقريبي):</label>
-            <input type="range" id="quality" min="0.1" max="1.0" step="0.1" value="0.5" class="w-full">
-            <div class="flex justify-between text-xs text-gray-500">
-                <span>أقصى ضغط</span>
-                <span>جودة عالية</span>
-            </div>
-        </div>
-
-        <button id="compress-btn" class="mt-8 bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 disabled:bg-gray-400 transition" disabled>
-            بدء الضغط الآن
-        </button>
-
-        <div id="status" class="mt-4 text-sm font-medium text-blue-600"></div>
+    <div class="drop-zone" onclick="document.getElementById('fileInput').click()">
+        <span id="fileName">اضغط لاختيار ملف PDF (حتى 1 جيجا)</span>
+        <input type="file" id="fileInput" hidden accept="application/pdf">
     </div>
 
-    <script>
-        const fileInput = document.getElementById('file-input');
-        const dropZone = document.getElementById('drop-zone');
-        const compressBtn = document.getElementById('compress-btn');
-        const status = document.getElementById('status');
-        const fileInfo = document.getElementById('file-info');
+    <div class="settings">
+        <label>قوة الضغط: <span id="qVal">50</span>%</label>
+        <input type="range" id="quality" min="10" max="90" value="50">
+        <p style="font-size: 11px; color: #94a3b8; margin-top: 5px;">(نسبة أقل = حجم أصغر جداً وجودة أقل)</p>
+    </div>
 
-        let selectedFile = null;
+    <button id="processBtn" disabled>ابدأ عملية الضغط الآن</button>
 
-        // التعامل مع السحب والإفلات
-        dropZone.onclick = () => fileInput.click();
-        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('border-blue-500'); };
-        dropZone.ondragleave = () => dropZone.classList.remove('border-blue-500');
-        dropZone.ondrop = (e) => {
-            e.preventDefault();
-            handleFile(e.dataTransfer.files[0]);
-        };
+    <div class="progress-bar" id="progBar"><div class="progress-fill" id="progFill"></div></div>
+    <div id="log"></div>
+</div>
 
-        fileInput.onchange = (e) => handleFile(e.target.files[0]);
+<script>
+    const { jsPDF } = window.jspdf;
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
-        function handleFile(file) {
-            if (file && file.type === "application/pdf") {
-                selectedFile = file;
-                fileInfo.classList.remove('hidden');
-                document.getElementById('file-name').innerText = file.name;
-                document.getElementById('file-size').innerText = (file.size / (1024 * 1024)).toFixed(2) + " MB";
-                compressBtn.disabled = false;
-                status.innerText = "";
-            } else {
-                alert("يرجى اختيار ملف PDF صحيح");
-            }
+    const fileInput = document.getElementById('fileInput');
+    const processBtn = document.getElementById('processBtn');
+    const log = document.getElementById('log');
+    const qVal = document.getElementById('qVal');
+    const qualityInput = document.getElementById('quality');
+    const progBar = document.getElementById('progBar');
+    const progFill = document.getElementById('progFill');
+
+    qualityInput.oninput = () => qVal.innerText = qualityInput.value;
+
+    fileInput.onchange = (e) => {
+        if(e.target.files[0]) {
+            document.getElementById('fileName').innerText = e.target.files[0].name;
+            processBtn.disabled = false;
         }
+    };
 
-        compressBtn.onclick = async () => {
-            if (!selectedFile) return;
+    function addLog(msg) {
+        log.innerHTML += `<div>- ${msg}</div>`;
+        log.scrollTop = log.scrollHeight;
+    }
 
-            status.innerText = "جاري معالجة الملف... يرجى الانتظار (لا تغلق الصفحة)";
-            compressBtn.disabled = true;
+    processBtn.onclick = async () => {
+        const file = fileInput.files[0];
+        if (!file) return;
 
-            try {
-                const arrayBuffer = await selectedFile.arrayBuffer();
-                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+        processBtn.disabled = true;
+        progBar.style.display = 'block';
+        addLog("بدء قراءة الملف...");
+
+        try {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+            const numPages = pdf.numPages;
+            addLog(`تم اكتشاف ${numPages} صفحة.`);
+
+            const pdfDoc = new jsPDF();
+            const quality = parseInt(qualityInput.value) / 100;
+
+            for (let i = 1; i <= numPages; i++) {
+                addLog(`جاري معالجة صفحة ${i}...`);
+                const page = await pdf.getPage(i);
+                const viewport = page.getViewport({scale: 1.5}); // تقليل المقياس يوفر مساحة ضخمة
                 
-                // ملاحظة: مكتبة متصفح بسيطة لا يمكنها تقليل حجم الصور بعمق مثل Ghostscript
-                // سنقوم بحفظ الملف بنظام "Linearization" و "Object Streams" لتقليل الحجم
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                await page.render({canvasContext: context, viewport: viewport}).promise;
                 
-                const pdfBytes = await pdfDoc.save({
-                    useObjectStreams: true,
-                    addDefaultPage: false,
-                    updateFieldAppearances: false
-                });
-
-                const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `compressed_${selectedFile.name}`;
-                link.click();
-
-                status.innerText = "تمت العملية! إذا لم يقل الحجم بشكل كبير، فذلك لأن الملف مضغوط بالفعل داخلياً.";
-            } catch (error) {
-                console.error(error);
-                status.innerText = "حدث خطأ: الملف كبير جداً على ذاكرة المتصفح.";
-            } finally {
-                compressBtn.disabled = false;
+                // تحويل الصفحة لصورة JPEG مضغوطة
+                const imgData = canvas.toDataURL('image/jpeg', quality);
+                
+                if (i > 1) pdfDoc.addPage();
+                
+                const imgProps = pdfDoc.getImageProperties(imgData);
+                const pdfWidth = pdfDoc.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                
+                pdfDoc.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                
+                // تحديث شريط التقدم
+                progFill.style.width = `${(i/numPages)*100}%`;
             }
-        };
-    </script>
+
+            addLog("جاري إنشاء الملف النهائي...");
+            pdfDoc.save('compressed_ultra.pdf');
+            addLog("تم التحميل بنجاح!");
+
+        } catch (err) {
+            console.error(err);
+            addLog("خطأ: " + err.message);
+        }
+        processBtn.disabled = false;
+    };
+</script>
+
 </body>
 </html>
