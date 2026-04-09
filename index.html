@@ -2,62 +2,85 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>المعالج الذكي PDF Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>زياد الكردي - المحرك الاحترافي لضغظ PDF</title>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Tajawal:wght@500;800&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background: #0f172a; color: white; }
-        .gradient-border { border: 2px solid; border-image: linear-gradient(45deg, #3b82f6, #10b981) 1; }
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #020617;
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+        .gold-text { background: linear-gradient(to bottom, #fde047, #ca8a04); -webkit-background-clip: text; color: transparent; }
+        .flag { width: 70px; height: 45px; border-radius: 6px; object-fit: cover; box-shadow: 0 0 15px rgba(255,255,255,0.1); }
+        .slider-thumb::-webkit-slider-thumb { border-radius: 50%; background: #10b981; cursor: pointer; height: 20px; width: 20px; appearance: none; border: 2px solid white; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6">
+<body class="flex flex-col items-center justify-center p-6">
 
-    <div class="bg-slate-900 border border-slate-800 shadow-2xl rounded-3xl p-8 w-full max-w-2xl">
-        <header class="text-center mb-10">
-            <h1 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400 mb-2">ضاغط PDF الذكي (جودة احترافية)</h1>
-            <p class="text-slate-400 text-sm">توازن بين وضوح النص وصغر الحجم الفائق</p>
-        </header>
+    <!-- الأعلام والترويسة -->
+    <div class="flex gap-6 mb-4">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Flag_of_Kurdistan.svg" class="flag" alt="Kurdistan">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Flag_of_Iraq.svg" class="flag" alt="Iraq">
+    </div>
 
-        <div id="dropZone" class="bg-slate-800/50 border-2 border-dashed border-slate-700 rounded-2xl p-12 text-center hover:border-emerald-500 transition-all cursor-pointer mb-8 group">
+    <div class="text-center mb-10">
+        <h1 class="text-6xl font-black gold-text mb-2">زياد الكردي</h1>
+        <p class="text-xl text-emerald-400 font-bold tracking-widest uppercase">ضغظ ملفات pdf بشكل احترافي</p>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-[2.5rem] p-10 shadow-2xl relative overflow-hidden">
+        
+        <!-- منطقة الرفع -->
+        <div id="dropZone" class="border-2 border-dashed border-slate-700 rounded-3xl p-12 text-center hover:border-emerald-500 transition-all cursor-pointer mb-8 bg-slate-950/50 group">
             <input type="file" id="fileInput" class="hidden" accept="application/pdf">
-            <div id="prompt">
-                <div class="text-6xl mb-4 opacity-50 group-hover:opacity-100 transition-opacity">📑</div>
-                <p class="text-slate-300">اسحب الملف هنا (حتى 1 جيجا)</p>
+            <div id="uploadUI">
+                <span class="text-6xl mb-4 block group-hover:scale-110 transition-transform">💎</span>
+                <p class="text-slate-300 text-lg">ارفع ملف PDF (حتى 5 جيجا)</p>
             </div>
-            <div id="fileStatus" class="hidden text-emerald-400 font-bold"></div>
+            <div id="fileInfo" class="hidden font-bold text-emerald-400">
+                <p id="fileName" class="text-xl"></p>
+                <p id="fileSize" class="text-slate-500 text-sm"></p>
+            </div>
         </div>
 
-        <div class="space-y-6">
-            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
-                <div class="flex justify-between mb-4">
-                    <label class="text-sm font-bold">موازنة الجودة والحجم:</label>
-                    <span id="valDisplay" class="text-emerald-400 font-bold">متوازن (جيد)</span>
-                </div>
-                <input type="range" id="qualitySlider" min="1" max="3" value="2" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
-                <div class="flex justify-between text-[10px] text-slate-500 mt-2">
-                    <span>أصغر حجم (نص مقروء)</span>
-                    <span>متوازن</span>
-                    <span>جودة عالية (حجم أكبر)</span>
-                </div>
+        <!-- إعدادات الضغط المخصصة -->
+        <div class="mb-10 p-6 bg-slate-950 rounded-2xl border border-slate-800">
+            <div class="flex justify-between items-center mb-6">
+                <label class="font-bold text-slate-300">نسبة الضغط المطلوبة:</label>
+                <span id="ratioDisplay" class="text-2xl font-black text-emerald-400">35%</span>
             </div>
-
-            <button id="startBtn" disabled class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-700 text-white font-black py-4 rounded-xl transition-all shadow-lg shadow-emerald-900/20 uppercase tracking-widest">
-                تحسين وضغط الآن 🚀
-            </button>
+            <input type="range" id="compressRatio" min="1" max="70" value="35" class="w-full h-3 bg-slate-800 rounded-lg appearance-none slider-thumb">
+            <div class="flex justify-between text-[11px] text-slate-500 mt-4 font-bold">
+                <span>جودة خارقة (1%)</span>
+                <span>توازن مثالي</span>
+                <span>أقصى ضغط (70%)</span>
+            </div>
         </div>
 
-        <div id="progressArea" class="hidden mt-10">
-            <div class="flex justify-between text-xs mb-2 text-slate-400">
-                <span id="statusMsg">جاري التحليل...</span>
-                <span id="percentNum">0%</span>
+        <button id="startBtn" disabled class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-emerald-900/40 disabled:bg-slate-800 disabled:text-slate-600 text-xl">
+            تجهيز وتحميل الملف المضغوط ⚡
+        </button>
+
+        <!-- التقدم -->
+        <div id="statusCont" class="hidden mt-10">
+            <div class="flex justify-between mb-2">
+                <span id="currentStatus" class="text-sm text-emerald-400 italic">جاري المعالجة بدقة عالية...</span>
+                <span id="progressPercent" class="font-black text-white text-xl">0%</span>
             </div>
-            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-emerald-500 h-full w-0 transition-all duration-300"></div>
+            <div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
+                <div id="progressBar" class="h-full bg-gradient-to-r from-emerald-500 to-emerald-300 w-0 transition-all"></div>
             </div>
         </div>
     </div>
+
+    <p class="mt-8 text-slate-600 text-sm italic">بواسطة: زياد الكردي - أداء فائق الجودة</p>
 
     <script>
         const { PDFDocument } = PDFLib;
@@ -65,34 +88,32 @@
 
         const fileInput = document.getElementById('fileInput');
         const startBtn = document.getElementById('startBtn');
-        const slider = document.getElementById('qualitySlider');
-        const valDisplay = document.getElementById('valDisplay');
-        
+        const ratioSlider = document.getElementById('compressRatio');
+        const ratioDisplay = document.getElementById('ratioDisplay');
         let selectedFile = null;
 
-        const modes = {
-            1: { scale: 1.0, quality: 0.3, label: "أصغر حجم (نص مقروء)" },
-            2: { scale: 1.5, quality: 0.5, label: "متوازن (جودة جيدة)" },
-            3: { scale: 2.0, quality: 0.7, label: "جودة احترافية (وضوح عالٍ)" }
-        };
-
-        slider.oninput = () => valDisplay.innerText = modes[slider.value].label;
+        ratioSlider.oninput = () => ratioDisplay.innerText = ratioSlider.value + "%";
 
         document.getElementById('dropZone').onclick = () => fileInput.click();
+        
         fileInput.onchange = (e) => {
-            if(e.target.files[0]) {
-                selectedFile = e.target.files[0];
-                document.getElementById('prompt').classList.add('hidden');
-                document.getElementById('fileStatus').classList.remove('hidden');
-                document.getElementById('fileStatus').innerText = `تم اختيار: ${selectedFile.name}`;
+            selectedFile = e.target.files[0];
+            if (selectedFile) {
+                document.getElementById('uploadUI').classList.add('hidden');
+                document.getElementById('fileInfo').classList.remove('hidden');
+                document.getElementById('fileName').innerText = selectedFile.name;
+                document.getElementById('fileSize').innerText = (selectedFile.size/1024/1024).toFixed(2) + " MB";
                 startBtn.disabled = false;
             }
         };
 
         startBtn.onclick = async () => {
-            const mode = modes[slider.value];
+            const ratio = parseInt(ratioSlider.value);
+            // تحويل نسبة الضغط إلى جودة صور: 1% ضغط تعني جودة 0.95 | 70% ضغط تعني جودة 0.15
+            const qualityValue = 1.0 - (ratio / 80); 
+            
             startBtn.disabled = true;
-            document.getElementById('progressArea').classList.remove('hidden');
+            document.getElementById('statusCont').classList.remove('hidden');
 
             try {
                 const arrayBuffer = await selectedFile.arrayBuffer();
@@ -100,67 +121,50 @@
                 const numPages = pdfData.numPages;
                 const outPdf = await PDFDocument.create();
 
-                // المعالجة بدفعات (أسرع وأكثر استقراراً)
-                const batchSize = 4; 
-                for (let i = 1; i <= numPages; i += batchSize) {
-                    const tasks = [];
-                    for (let j = 0; j < batchSize && (i + j) <= numPages; j++) {
-                        tasks.push(renderPage(pdfData, i + j, mode));
-                    }
+                for (let i = 1; i <= numPages; i++) {
+                    document.getElementById('currentStatus').innerText = `معالجة الصفحة ${i} من ${numPages}...`;
+                    
+                    const page = await pdfData.getPage(i);
+                    // السر هنا: رفع الـ scale لـ 2.5 يضمن وضوح النصوص بشكل مذهل
+                    const viewport = page.getViewport({scale: 2.5});
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d', { alpha: false });
+                    
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    // تحسين الرسم للنصوص
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
 
-                    const results = await Promise.all(tasks);
-
-                    for (const res of results) {
-                        const img = await outPdf.embedJpg(res.imgData);
-                        const page = outPdf.addPage([res.width, res.height]);
-                        page.drawImage(img, { x: 0, y: 0, width: res.width, height: res.height });
-                    }
-
-                    const progress = Math.round((Math.min(i + batchSize - 1, numPages) / numPages) * 100);
+                    await page.render({canvasContext: ctx, viewport: viewport}).promise;
+                    
+                    // تحويل لـ JPEG بناءً على اختيار المستخدم
+                    const imgData = canvas.toDataURL('image/jpeg', qualityValue);
+                    const img = await outPdf.embedJpg(imgData);
+                    
+                    const newPage = outPdf.addPage([viewport.width, viewport.height]);
+                    newPage.drawImage(img, { x: 0, y: 0, width: viewport.width, height: viewport.height });
+                    
+                    const progress = Math.round((i / numPages) * 100);
                     document.getElementById('progressBar').style.width = progress + "%";
-                    document.getElementById('percentNum').innerText = progress + "%";
-                    document.getElementById('statusMsg').innerText = `معالجة صفحة ${Math.min(i + batchSize - 1, numPages)} من ${numPages}...`;
+                    document.getElementById('progressPercent').innerText = progress + "%";
                 }
 
-                document.getElementById('statusMsg').innerText = "جاري الحفظ النهائي...";
                 const finalBytes = await outPdf.save();
                 const blob = new Blob([finalBytes], { type: "application/pdf" });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "Optimized_" + selectedFile.name;
-                a.click();
-                document.getElementById('statusMsg').innerText = "✅ اكتمل التحميل!";
-
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = "مضغوط_زياد_الكردي_" + selectedFile.name;
+                link.click();
+                
+                document.getElementById('currentStatus').innerText = "✅ تم التحميل بنجاح!";
             } catch (err) {
                 console.error(err);
-                document.getElementById('statusMsg').innerText = "❌ حدث خطأ في الذاكرة.";
+                alert("تعذر الضغط: الملف كبير جداً على ذاكرة المتصفح.");
             }
             startBtn.disabled = false;
         };
-
-        async function renderPage(pdf, pageNum, mode) {
-            const page = await pdf.getPage(pageNum);
-            // السر هنا: scale=1.5 يحافظ على وضوح النص بشكل كبير جداً مقارنة بـ 0.5
-            const viewport = page.getViewport({scale: mode.scale});
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d', { alpha: false });
-            
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            // تحسين الرندر ليكون النص حاداً (Sharp)
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = 'high';
-
-            await page.render({canvasContext: ctx, viewport: viewport}).promise;
-            
-            return {
-                imgData: canvas.toDataURL('image/jpeg', mode.quality),
-                width: viewport.width,
-                height: viewport.height
-            };
-        }
     </script>
 </body>
 </html>
