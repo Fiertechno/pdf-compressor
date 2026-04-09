@@ -3,84 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>زياد الكردي - المحرك الاحترافي لضغظ PDF</title>
+    <title>زياد الكردي - ضاغط PDF الاحترافي</title>
     
+    <!-- المكتبات الأساسية -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+        
         body {
             font-family: 'Tajawal', sans-serif;
             background: #020617;
             color: #f8fafc;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
         }
-        .gold-text { background: linear-gradient(to bottom, #fde047, #ca8a04); -webkit-background-clip: text; color: transparent; }
-        .flag { width: 70px; height: 45px; border-radius: 6px; object-fit: cover; box-shadow: 0 0 15px rgba(255,255,255,0.1); }
-        .slider-thumb::-webkit-slider-thumb { border-radius: 50%; background: #10b981; cursor: pointer; height: 20px; width: 20px; appearance: none; border: 2px solid white; }
+
+        .gold-text {
+            background: linear-gradient(to bottom, #fde047, #ca8a04);
+            -webkit-background-clip: text;
+            color: transparent;
+            font-weight: 900;
+        }
+
+        /* تنسيق الأعلام */
+        .flags-header {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .flag-box {
+            width: 90px;
+            height: 60px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .flag-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .main-card {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 2rem;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 550px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+        }
+
+        input[type=range] {
+            accent-color: #10b981;
+            width: 100%;
+            cursor: pointer;
+        }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center p-6">
+<body>
 
-    <!-- الأعلام والترويسة -->
-    <div class="flex gap-6 mb-4">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Flag_of_Kurdistan.svg" class="flag" alt="Kurdistan">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Flag_of_Iraq.svg" class="flag" alt="Iraq">
+    <!-- قسم الأعلام المدمجة كلياً -->
+    <div class="flags-header">
+        <!-- علم كردستان -->
+        <div class="flag-box">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAAB6CAMAAADu5J89AAAAYFBMVEX///8Aqv8Arv8Asv8AsP8Aqv8Aqf8Aqf8Aqv8Aqf8Aqv8Aqf8Aqv8Aqf8AqP8Aqf8Aqf8Aqf8Aqv8Aqf8Aqv8Aqf8AqP8AqP8Aqv8Aqf8Aqf8AqP8Aqf8Aqv8Aqf8AqP/mX5VRAAAAHXRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQWl9rb3N3e4OGIuI4AAAGKSURBVHja7dvLToNAEAVQYV6igCgoIuL//60jM5pU4onOnZbeXVU36U7Tbe88B87Z7m775UfG+Y6Yf9X51S5vH77F+Y6Zf9m6uYvjhzp7N/fH2jY7Zt9ZtzfG99Yx+8Z6vD6+tY7ZD9bttPHeOmY/WLfVxXvrmP1m3VYX761j9ot1W128t47ZT9ZtdfHeOmY/WbfVxXvrmP1m3VYX761j9pt1W128t47ZD9bttPHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9tO5YV91Xv8679+97n763f/nN87vX759+O79B92A72P470UeAAAAAElFTkSuQmCC" alt="Kurdistan Flag">
+        </div>
+        <!-- علم العراق -->
+        <div class="flag-box">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAAB6CAMAAADu5J89AAAATlBMVEX///8Aqf8Anf8Alf8Aqv8Asf8Asv8Atv8Avv8Aqv8Aqf8Aqv8Aqf8AqP8Aqf8AqP8Aqf8AqP8Aqf8Aqv8Aqf8Aqf8Aqf8Aqv8Aqf8Aqf8Z5C3iAAAAHXRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQWl9rb3N3e4OGIuI4AAAFuSURBVHja7dvLToNAEAVQYV6igCgoIuL//60jM5pU4onOnZbeXVU36U7Tbe88B87Z7m775UfG+Y6Yf9X51S5vH77F+Y6Zf9m6uYvjhzp7N/fH2jY7Zt9ZtzfG99Yx+8Z6vD6+tY7ZD9bttPHeOmY/WLfVxXvrmP1m3VYX761j9pt1W128t47ZD9bttPHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9pt1W128t47ZD9ZtdfHeOmY/WLfVxXvrmP1g3VYX761j9tO5YV91Xv8679+97n763f/nN87vX759+O79B92A72P470UeAAAAAElFTkSuQmCC" alt="Iraq Flag">
+        </div>
     </div>
 
-    <div class="text-center mb-10">
-        <h1 class="text-6xl font-black gold-text mb-2">زياد الكردي</h1>
-        <p class="text-xl text-emerald-400 font-bold tracking-widest uppercase">ضغظ ملفات pdf بشكل احترافي</p>
+    <!-- ترويسة الموقع -->
+    <div class="text-center mb-8">
+        <h1 class="text-6xl gold-text mb-2 tracking-tight">زياد الكردي</h1>
+        <p class="text-emerald-400 font-bold text-xl uppercase tracking-widest">ضغط ملفات PDF بشكل احترافي</p>
     </div>
 
-    <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-[2.5rem] p-10 shadow-2xl relative overflow-hidden">
-        
+    <div class="main-card">
         <!-- منطقة الرفع -->
-        <div id="dropZone" class="border-2 border-dashed border-slate-700 rounded-3xl p-12 text-center hover:border-emerald-500 transition-all cursor-pointer mb-8 bg-slate-950/50 group">
+        <div id="dropZone" class="border-2 border-dashed border-slate-700 rounded-3xl p-10 text-center hover:border-emerald-500 transition-all cursor-pointer mb-8 bg-slate-950/40 group">
             <input type="file" id="fileInput" class="hidden" accept="application/pdf">
-            <div id="uploadUI">
-                <span class="text-6xl mb-4 block group-hover:scale-110 transition-transform">💎</span>
-                <p class="text-slate-300 text-lg">ارفع ملف PDF (حتى 5 جيجا)</p>
+            <div id="uploadText">
+                <span class="text-5xl mb-4 block group-hover:scale-110 transition-transform">💎</span>
+                <p class="text-slate-300 text-lg font-bold">ارفع ملف الـ PDF هنا</p>
             </div>
-            <div id="fileInfo" class="hidden font-bold text-emerald-400">
-                <p id="fileName" class="text-xl"></p>
+            <div id="fileInfo" class="hidden">
+                <p id="fileName" class="text-emerald-400 font-bold text-lg truncate"></p>
                 <p id="fileSize" class="text-slate-500 text-sm"></p>
             </div>
         </div>
 
-        <!-- إعدادات الضغط المخصصة -->
-        <div class="mb-10 p-6 bg-slate-950 rounded-2xl border border-slate-800">
+        <!-- إعدادات الضغط 1% - 70% -->
+        <div class="mb-10 bg-slate-950 p-6 rounded-2xl border border-slate-800">
             <div class="flex justify-between items-center mb-6">
-                <label class="font-bold text-slate-300">نسبة الضغط المطلوبة:</label>
-                <span id="ratioDisplay" class="text-2xl font-black text-emerald-400">35%</span>
+                <span class="text-slate-300 font-bold">نسبة الضغط المطلوبة:</span>
+                <span id="ratioDisplay" class="text-3xl font-black text-emerald-400">35%</span>
             </div>
-            <input type="range" id="compressRatio" min="1" max="70" value="35" class="w-full h-3 bg-slate-800 rounded-lg appearance-none slider-thumb">
-            <div class="flex justify-between text-[11px] text-slate-500 mt-4 font-bold">
+            <input type="range" id="compressRatio" min="1" max="70" value="35">
+            <div class="flex justify-between text-[11px] text-slate-500 mt-4 font-bold uppercase tracking-tighter">
                 <span>جودة خارقة (1%)</span>
                 <span>توازن مثالي</span>
                 <span>أقصى ضغط (70%)</span>
             </div>
         </div>
 
-        <button id="startBtn" disabled class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-emerald-900/40 disabled:bg-slate-800 disabled:text-slate-600 text-xl">
-            تجهيز وتحميل الملف المضغوط ⚡
+        <button id="startBtn" disabled class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-emerald-900/40 text-xl italic uppercase tracking-widest">
+            بدء الضغط الآن 🚀
         </button>
 
-        <!-- التقدم -->
-        <div id="statusCont" class="hidden mt-10">
-            <div class="flex justify-between mb-2">
-                <span id="currentStatus" class="text-sm text-emerald-400 italic">جاري المعالجة بدقة عالية...</span>
-                <span id="progressPercent" class="font-black text-white text-xl">0%</span>
+        <!-- حالة التقدم -->
+        <div id="progressArea" class="hidden mt-8">
+            <div class="flex justify-between text-xs mb-2">
+                <span id="statusMsg" class="text-emerald-400 font-bold italic animate-pulse">جاري معالجة الصفحات...</span>
+                <span id="percentNum" class="font-black text-white text-lg">0%</span>
             </div>
             <div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
-                <div id="progressBar" class="h-full bg-gradient-to-r from-emerald-500 to-emerald-300 w-0 transition-all"></div>
+                <div id="progressBar" class="h-full bg-emerald-500 rounded-full w-0 transition-all duration-300 shadow-[0_0_15px_#10b981]"></div>
             </div>
         </div>
     </div>
 
-    <p class="mt-8 text-slate-600 text-sm italic">بواسطة: زياد الكردي - أداء فائق الجودة</p>
+    <footer class="mt-12 text-slate-600 text-sm font-bold">
+        الحقوق محفوظة &copy; <span class="text-emerald-400">زياد الكردي</span>
+    </footer>
 
     <script>
         const { PDFDocument } = PDFLib;
@@ -99,7 +157,7 @@
         fileInput.onchange = (e) => {
             selectedFile = e.target.files[0];
             if (selectedFile) {
-                document.getElementById('uploadUI').classList.add('hidden');
+                document.getElementById('uploadText').classList.add('hidden');
                 document.getElementById('fileInfo').classList.remove('hidden');
                 document.getElementById('fileName').innerText = selectedFile.name;
                 document.getElementById('fileSize').innerText = (selectedFile.size/1024/1024).toFixed(2) + " MB";
@@ -109,11 +167,11 @@
 
         startBtn.onclick = async () => {
             const ratio = parseInt(ratioSlider.value);
-            // تحويل نسبة الضغط إلى جودة صور: 1% ضغط تعني جودة 0.95 | 70% ضغط تعني جودة 0.15
-            const qualityValue = 1.0 - (ratio / 80); 
+            // جودة عكسية: 1% ضغط تعني جودة 0.95 | 70% ضغط تعني جودة 0.1
+            const qualityValue = Math.max(0.1, 0.98 - (ratio / 75));
             
             startBtn.disabled = true;
-            document.getElementById('statusCont').classList.remove('hidden');
+            document.getElementById('progressArea').classList.remove('hidden');
 
             try {
                 const arrayBuffer = await selectedFile.arrayBuffer();
@@ -122,33 +180,30 @@
                 const outPdf = await PDFDocument.create();
 
                 for (let i = 1; i <= numPages; i++) {
-                    document.getElementById('currentStatus').innerText = `معالجة الصفحة ${i} من ${numPages}...`;
-                    
                     const page = await pdfData.getPage(i);
-                    // السر هنا: رفع الـ scale لـ 2.5 يضمن وضوح النصوص بشكل مذهل
-                    const viewport = page.getViewport({scale: 2.5});
+                    // مقياس 2.2 يضمن وضوح النصوص بشكل ممتاز جداً
+                    const viewport = page.getViewport({scale: 2.2});
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d', { alpha: false });
                     
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
                     
-                    // تحسين الرسم للنصوص
                     ctx.imageSmoothingEnabled = true;
                     ctx.imageSmoothingQuality = 'high';
 
                     await page.render({canvasContext: ctx, viewport: viewport}).promise;
                     
-                    // تحويل لـ JPEG بناءً على اختيار المستخدم
                     const imgData = canvas.toDataURL('image/jpeg', qualityValue);
                     const img = await outPdf.embedJpg(imgData);
                     
                     const newPage = outPdf.addPage([viewport.width, viewport.height]);
                     newPage.drawImage(img, { x: 0, y: 0, width: viewport.width, height: viewport.height });
                     
-                    const progress = Math.round((i / numPages) * 100);
-                    document.getElementById('progressBar').style.width = progress + "%";
-                    document.getElementById('progressPercent').innerText = progress + "%";
+                    const prog = Math.round((i / numPages) * 100);
+                    document.getElementById('progressBar').style.width = prog + "%";
+                    document.getElementById('percentNum').innerText = prog + "%";
+                    document.getElementById('statusMsg').innerText = `معالجة صفحة ${i} من ${numPages}...`;
                 }
 
                 const finalBytes = await outPdf.save();
@@ -158,10 +213,11 @@
                 link.download = "مضغوط_زياد_الكردي_" + selectedFile.name;
                 link.click();
                 
-                document.getElementById('currentStatus').innerText = "✅ تم التحميل بنجاح!";
+                document.getElementById('statusMsg').innerText = "✅ اكتمل الضغط بنجاح!";
+                document.getElementById('statusMsg').classList.remove('animate-pulse');
             } catch (err) {
                 console.error(err);
-                alert("تعذر الضغط: الملف كبير جداً على ذاكرة المتصفح.");
+                alert("تعذر المعالجة: الملف كبير جداً على ذاكرة المتصفح.");
             }
             startBtn.disabled = false;
         };
